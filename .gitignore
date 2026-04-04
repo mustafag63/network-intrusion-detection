@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+.ipynb_checkpoints/
+outputs/models/
+outputs/results/
+outputs/figures/
+MachineLearningCVE/
+.env
