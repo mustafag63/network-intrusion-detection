@@ -1,10 +1,23 @@
+# Python
 __pycache__/
 *.pyc
 *.pyo
+
+# macOS
 .DS_Store
+
+# Jupyter
 .ipynb_checkpoints/
-outputs/models/
-outputs/results/
-outputs/figures/
+
+# Ham veri — çok büyük, repoya alınmaz
 MachineLearningCVE/
+
+# Temizlenmiş veri — büyük dosyalar
+outputs/cicids2017_clean.parquet
+outputs/cicids2017_clean.csv.gz
+
+# Eğitilmiş modeller — büyük dosyalar
+outputs/models/
+
+# Ortam
 .env
