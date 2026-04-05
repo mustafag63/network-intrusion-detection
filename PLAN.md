@@ -5,14 +5,23 @@ Tamamlananlar ✅, devam edenler 🔄, bekleyenler ⬜.
 
 ---
 
-## Faz 1 — Keşifçi Veri Analizi (`01_eda.ipynb`) ⬜
+## Faz 1 — Keşifçi Veri Analizi (`01_eda.ipynb`) ✅
 
-- [ ] Tüm CSV'leri yükle, birleştir, temizle
-- [ ] Sınıf dağılımını görselleştir (`sinif_dagilimi.png`)
-- [ ] Eksik değer / sonsuz değer analizi
-- [ ] Feature korelasyon ısı haritası (`korelasyon.png`)
-- [ ] Özellik dağılımlarını sınıfa göre karşılaştır
-- [ ] Veri dengesizliği oranını raporla
+- [x] Tüm CSV'leri yükle, birleştir, temizle
+  - Kopya sütun, sonsuz değer, NaN, negatif değer, sabit sütun, kopya satır
+  - `Init_Win_bytes` sentinel flag eklendi; `tcp_win_seen_*` sütunları üretildi
+- [x] Sınıf dağılımını görselleştir (`sinif_dagilimi.png`)
+  - Aile bazlı gruplama (7 aile), IR Binary & IR Macro hesaplandı
+  - Kritik küçük sınıflar tespit edildi → Faz 2'de SMOTE k değeri küçültülmeli
+- [x] Eksik değer / sonsuz değer analizi
+  - `duration=0` → `inf` kökeni belgelendi; skewness analizi yapıldı (`skewness_dagilimi.png`)
+- [x] Feature korelasyon ısı haritası (`korelasyon.png`, `yuksek_korelasyon.png`)
+  - `|r| ≥ 0.95` çiftler tespit edildi → `high_corr_to_drop.json` (Faz 4'te uygulanacak)
+- [x] Özellik dağılımlarını sınıfa göre karşılaştır
+  - ANOVA F-skoru ile sıralandı (`feature_f_scores.csv`)
+  - BENIGN vs ATTACK histogram + aile bazlı box plot üretildi
+- [x] Veri dengesizliği oranını raporla
+  - IR Binary, IR Macro hesaplandı; özet rapora eklendi
 
 ---
 
