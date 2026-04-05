@@ -29,8 +29,17 @@ Tamamlananlar ✅, devam edenler 🔄, bekleyenler ⬜.
 
 - [x] Label encoding + train/test split (%80/%20)
 - [x] Pipeline kur: VarianceThreshold → StandardScaler
-- [ ] Random Forest ile 5-fold stratified CV
-- [ ] CV sonuçlarını kaydet (`outputs/results/random_forest_cv_folds.csv`)
+  - 4 sütun çıkarıldı (`Fwd URG Flags`, `RST Flag Count`, `CWE Flag Count`, `ECE Flag Count`)
+  - `preprocessor.joblib` ve `kept_features.json` kaydedildi
+- [x] Random Forest ile 5-fold stratified CV (%10 örnekleme)
+  - `class_weight='balanced'` eklendi
+  - Çok nadir sınıflar CV havuzundan çıkarıldı (Heartbleed, Infiltration, Web Attack–SQL Injection — her biri < 5 örnek)
+    - Kök neden: bu sınıflar bazı fold'larda val'a düşmüyor → model sütun üretmiyor → roc_auc NaN
+  - Scorer: `roc_auc_ovr_weighted` (standard, custom scorer gereksiz)
+  - val_f1_macro ≈ 0.83, val_roc_auc artık NaN değil
+- [x] Fold başına `classification_report` — hangi sınıfların F1'i düşük tespit edildi
+  - `outputs/results/random_forest_cv_class_report.csv` kaydedildi
+- [x] CV sonuçlarını kaydet (`outputs/results/random_forest_cv_folds.csv`)
 - [ ] SMOTE ile yeniden dengele, final model eğit
 - [ ] Test seti değerlendirmesi: F1 Macro, Accuracy, ROC-AUC
 - [ ] Confusion matrix kaydet (`outputs/figures/confusion_random_forest.png`)
