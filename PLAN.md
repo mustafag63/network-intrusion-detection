@@ -5,7 +5,7 @@ Tamamlananlar ✅, devam edenler 🔄, bekleyenler ⬜.
 
 ---
 
-## Faz 1 — Keşifçi Veri Analizi (`01_eda.ipynb`) ✅
+## Faz 1 — Exploatory Data Analysis (`01_eda.ipynb`) ✅
 
 - [x] Tüm CSV'leri yükle, birleştir, temizle
   - Kopya sütun, sonsuz değer, NaN, negatif değer, sabit sütun, kopya satır
@@ -25,10 +25,10 @@ Tamamlananlar ✅, devam edenler 🔄, bekleyenler ⬜.
 
 ---
 
-## Faz 2 — Baseline Model (`02_baseline.ipynb`) ⬜
+## Faz 2 — Baseline Model (`02_baseline.ipynb`) 🔄
 
-- [ ] Label encoding + train/test split (%80/%20)
-- [ ] Pipeline kur: VarianceThreshold → StandardScaler
+- [x] Label encoding + train/test split (%80/%20)
+- [x] Pipeline kur: VarianceThreshold → StandardScaler
 - [ ] Random Forest ile 5-fold stratified CV
 - [ ] CV sonuçlarını kaydet (`outputs/results/random_forest_cv_folds.csv`)
 - [ ] SMOTE ile yeniden dengele, final model eğit
