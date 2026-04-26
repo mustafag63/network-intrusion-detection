@@ -41,23 +41,34 @@ Tamamlananlar ✅, devam edenler 🔄, bekleyenler ⬜.
   - `outputs/results/random_forest_cv_class_report.csv` kaydedildi
 - [x] CV sonuçlarını kaydet (`outputs/results/random_forest_cv_folds.csv`)
 - [x] SMOTE ile yeniden dengele, final model eğit
+  - 10 sınıf 5.000 örneğe çıkarıldı (+30.879 sentetik örnek)
+  - `max_depth=25`, `min_samples_leaf=4` (overfitting azaltmak için)
 - [x] Test seti değerlendirmesi: F1 Macro, Accuracy, ROC-AUC
+  - Test Accuracy: **0.9966** | F1 Macro: **0.845** | F1 Weighted: 0.997 | ROC-AUC: 1.000
+  - Sorunlu sınıflar: Bot (F1=0.41, precision=0.26 — çok fazla FP), XSS (0.47), Brute Force (0.72)
+  - Heartbleed/SQL Injection test seti < 5 örnek — bu sınıfların F1'i istatistiksel olarak anlamsız
 - [x] Confusion matrix kaydet (`outputs/figures/confusion_random_forest.png`)
 - [x] Modeli kaydet (`outputs/models/random_forest_baseline.joblib`)
 
 ---
 
-## Faz 3 — Model Karşılaştırması (`03_comparison.ipynb`) ⬜
+## Faz 3 — Model Karşılaştırması (`03_comparison.ipynb`) 🔄
 
-- [ ] Aynı pipeline ile 5 model çalıştır:
-  - [ ] Logistic Regression
-  - [ ] Random Forest
+**Faz 2'den gelen bulgular ve odak noktaları:**
+- Bot sınıfında precision=0.26 → SMOTE yetersiz, ADASYN veya threshold tuning denenecek
+- XSS ve Brute Force hâlâ zayıf → gradient boosting tabanlı modeller RF'e göre üstün olabilir
+- Baseline F1 Macro 0.845 → hedef ≥ 0.90
+
+- [ ] Aynı pipeline + SMOTE ile modelleri karşılaştır:
+  - [ ] Random Forest (Faz 2 baseline — referans)
   - [ ] XGBoost
   - [ ] LightGBM
-  - [ ] Gradient Boosting
-- [ ] Her model için CV sonuçlarını kaydet
-- [ ] Karşılaştırma tablosu oluştur
+  - [ ] Logistic Regression (alt tavan için)
+- [ ] Her model için 5-fold CV + test seti değerlendirmesi
+- [ ] Bot sınıfı için ADASYN'ı SMOTE ile karşılaştır
+- [ ] Karşılaştırma tablosu oluştur (F1 Macro, F1 per-class, eğitim süresi)
 - [ ] F1 Macro bar grafiği (`outputs/figures/model_karsilastirma.png`)
+- [ ] En iyi modeli seç → Faz 4'e taşı
 
 ---
 
