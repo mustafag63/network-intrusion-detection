@@ -25,7 +25,7 @@ Tamamlananlar ✅, devam edenler 🔄, bekleyenler ⬜.
 
 ---
 
-## Faz 2 — Baseline Model (`02_baseline.ipynb`) 🔄
+## Faz 2 — Baseline Model (`02_baseline.ipynb`) ✅
 
 - [x] Label encoding + train/test split (%80/%20)
 - [x] Pipeline kur: VarianceThreshold → StandardScaler
@@ -40,10 +40,10 @@ Tamamlananlar ✅, devam edenler 🔄, bekleyenler ⬜.
 - [x] Fold başına `classification_report` — hangi sınıfların F1'i düşük tespit edildi
   - `outputs/results/random_forest_cv_class_report.csv` kaydedildi
 - [x] CV sonuçlarını kaydet (`outputs/results/random_forest_cv_folds.csv`)
-- [ ] SMOTE ile yeniden dengele, final model eğit
-- [ ] Test seti değerlendirmesi: F1 Macro, Accuracy, ROC-AUC
-- [ ] Confusion matrix kaydet (`outputs/figures/confusion_random_forest.png`)
-- [ ] Modeli kaydet (`outputs/models/random_forest_baseline.joblib`)
+- [x] SMOTE ile yeniden dengele, final model eğit
+- [x] Test seti değerlendirmesi: F1 Macro, Accuracy, ROC-AUC
+- [x] Confusion matrix kaydet (`outputs/figures/confusion_random_forest.png`)
+- [x] Modeli kaydet (`outputs/models/random_forest_baseline.joblib`)
 
 ---
 
