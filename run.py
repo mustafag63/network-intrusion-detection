@@ -1,11 +1,11 @@
 """
-Kullanım:
-  python run.py                          # config.yaml'daki model, tam veri
-  python run.py --model xgboost          # farklı model
-  python run.py --sample 0.1            # %10 veriyle hızlı test
+Usage:
+  python run.py                          # model from config.yaml, full dataset
+  python run.py --model xgboost          # different model
+  python run.py --sample 0.1            # quick test with 10% of data
   python run.py --task binary           # BENIGN / ATTACK
-  python run.py --no-smote              # SMOTE olmadan
-  python run.py --compare               # tüm modelleri karşılaştır
+  python run.py --no-smote              # without SMOTE
+  python run.py --compare               # compare all models
 """
 
 import argparse
@@ -33,12 +33,12 @@ def load_config(path: str = "configs/config.yaml") -> dict:
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Network Intrusion Detection Pipeline")
-    parser.add_argument("--model", choices=list(MODEL_REGISTRY), help="Eğitilecek model")
-    parser.add_argument("--sample", type=float, help="Veri oranı (örn. 0.1)")
+    parser.add_argument("--model", choices=list(MODEL_REGISTRY), help="Model to train")
+    parser.add_argument("--sample", type=float, help="Data fraction (e.g. 0.1)")
     parser.add_argument("--task", choices=["binary", "multiclass"], help="binary / multiclass")
-    parser.add_argument("--no-smote", action="store_true", help="SMOTE'u devre dışı bırak")
-    parser.add_argument("--compare", action="store_true", help="Tüm modelleri karşılaştır")
-    parser.add_argument("--config", default="configs/config.yaml", help="Config dosya yolu")
+    parser.add_argument("--no-smote", action="store_true", help="Disable SMOTE")
+    parser.add_argument("--compare", action="store_true", help="Compare all models")
+    parser.add_argument("--config", default="configs/config.yaml", help="Path to config file")
     return parser.parse_args()
 
 
@@ -48,7 +48,7 @@ def run(cfg: dict, model_name: str, use_smote: bool):
     cv_cfg = cfg["cv"]
     out_cfg = cfg["output"]
 
-    # 1. Veri yükle
+    # 1. Load data
     X, y = load_dataset(
         data_dir=data_cfg["data_dir"],
         sample_frac=data_cfg["sample_frac"],
@@ -65,7 +65,7 @@ def run(cfg: dict, model_name: str, use_smote: bool):
         stratify=y_enc,
     )
 
-    # 3. CV
+    # 3. Cross-validation
     pipeline_cv = build_pipeline(
         variance_threshold=pp_cfg["variance_threshold"],
         scale=pp_cfg["scale"],
@@ -95,7 +95,7 @@ def run(cfg: dict, model_name: str, use_smote: bool):
 
     final_pipeline = train_final(final_pipeline, model_name, X_train, y_train)
 
-    # 5. Değerlendirme
+    # 5. Evaluation
     metrics = evaluate(
         final_pipeline, X_test, y_test,
         label_encoder=le,
@@ -103,7 +103,7 @@ def run(cfg: dict, model_name: str, use_smote: bool):
         figures_dir=out_cfg["figures_dir"],
     )
 
-    # 6. Kaydet
+    # 6. Save
     if cfg["output"]["save_model"]:
         save_model(final_pipeline, name=f"{model_name}_baseline", models_dir=out_cfg["models_dir"])
         joblib.dump(le, os.path.join(out_cfg["models_dir"], "label_encoder.joblib"))
@@ -115,7 +115,7 @@ def main():
     args = parse_args()
     cfg = load_config(args.config)
 
-    # CLI argümanları config'i override eder
+    # CLI arguments override config
     if args.model:
         cfg["model"]["name"] = args.model
     if args.sample:
@@ -139,7 +139,7 @@ def main():
     else:
         run(cfg, model_name=cfg["model"]["name"], use_smote=use_smote)
 
-    print("\nTamamlandı. Çıktılar → outputs/")
+    print("\nDone. Outputs → outputs/")
 
 
 if __name__ == "__main__":

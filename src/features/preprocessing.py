@@ -1,6 +1,6 @@
 """
-Özellik ön işleme pipeline'ı.
-sklearn Pipeline döndürür → fit/transform/predict zincirine doğrudan eklenir.
+Feature preprocessing pipeline.
+Returns an sklearn Pipeline → plugs directly into fit/transform/predict chains.
 """
 
 import numpy as np
@@ -16,11 +16,11 @@ def build_pipeline(
     scale: bool = True,
 ) -> ImbPipeline:
     """
-    Preprocessing pipeline döndürür.
+    Returns a preprocessing pipeline.
 
-    Adımlar:
-        1. VarianceThreshold  – sabit/düşük varyanslı feature'ları atar
-        2. StandardScaler     – z-score normalizasyon (isteğe bağlı)
+    Steps:
+        1. VarianceThreshold  – drops constant / near-zero-variance features
+        2. StandardScaler     – z-score normalisation (optional)
     """
     steps = [
         ("variance", VarianceThreshold(threshold=variance_threshold)),
@@ -36,9 +36,9 @@ def build_pipeline_with_smote(
     scale: bool = True,
 ) -> ImbPipeline:
     """
-    SMOTE dahil pipeline (sadece eğitimde kullanılır).
+    Pipeline including SMOTE (training only).
 
-    Adımlar:
+    Steps:
         1. VarianceThreshold
         2. StandardScaler
         3. SMOTE
@@ -54,8 +54,8 @@ def build_pipeline_with_smote(
 
 
 def encode_labels(y: pd.Series) -> tuple[np.ndarray, LabelEncoder]:
-    """Kategorik etiketleri sayıya çevirir, encoder'ı döndürür."""
+    """Encodes categorical labels to integers; returns the fitted encoder."""
     le = LabelEncoder()
     y_enc = le.fit_transform(y)
-    print(f"Sınıflar ({len(le.classes_)}): {list(le.classes_)}")
+    print(f"Classes ({len(le.classes_)}): {list(le.classes_)}")
     return y_enc, le

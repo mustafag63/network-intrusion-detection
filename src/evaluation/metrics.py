@@ -1,5 +1,5 @@
 """
-Model değerlendirme ve görselleştirme modülü.
+Model evaluation and visualisation module.
 """
 
 import os
@@ -27,7 +27,7 @@ def evaluate(
     figures_dir: str,
 ) -> dict:
     """
-    Test seti üzerinde tahmin yapar, metrikleri hesaplar ve grafikleri kaydeder.
+    Runs predictions on the test set, computes metrics, and saves plots.
     """
     y_pred = pipeline.predict(X_test)
     classes = label_encoder.classes_
@@ -35,7 +35,6 @@ def evaluate(
     f1_macro = f1_score(y_test, y_pred, average="macro")
     accuracy = (y_test == y_pred).mean()
 
-    # ROC-AUC (olasılık destekliyorsa)
     auc = None
     if hasattr(pipeline, "predict_proba"):
         try:
@@ -45,11 +44,11 @@ def evaluate(
             pass
 
     print(f"\n{'=' * 55}")
-    print(f"  Model : {model_name}")
-    print(f"  F1 Macro  : {f1_macro:.4f}")
-    print(f"  Accuracy  : {accuracy:.4f}")
+    print(f"  Model    : {model_name}")
+    print(f"  F1 Macro : {f1_macro:.4f}")
+    print(f"  Accuracy : {accuracy:.4f}")
     if auc:
-        print(f"  ROC-AUC   : {auc:.4f}")
+        print(f"  ROC-AUC  : {auc:.4f}")
     print("=" * 55)
     print(classification_report(y_test, y_pred, target_names=classes))
 
@@ -78,55 +77,55 @@ def plot_confusion_matrix(
         cm, annot=True, fmt="d", cmap="Blues",
         xticklabels=classes, yticklabels=classes, ax=ax
     )
-    ax.set_xlabel("Tahmin")
-    ax.set_ylabel("Gerçek")
-    ax.set_title(f"Karmaşıklık Matrisi — {model_name}")
+    ax.set_xlabel("Predicted")
+    ax.set_ylabel("Actual")
+    ax.set_title(f"Confusion Matrix — {model_name}")
     plt.tight_layout()
     path = os.path.join(figures_dir, f"confusion_{model_name}.png")
     fig.savefig(path, dpi=150)
     plt.close(fig)
-    print(f"Karmaşıklık matrisi kaydedildi → {path}")
+    print(f"Confusion matrix saved → {path}")
 
 
 def plot_class_distribution(y: pd.Series, figures_dir: str) -> None:
-    """Sınıf dağılımı çubuk grafiği."""
+    """Bar chart of class distribution."""
     os.makedirs(figures_dir, exist_ok=True)
     counts = y.value_counts().sort_values(ascending=False)
     fig, ax = plt.subplots(figsize=(10, 5))
     counts.plot(kind="bar", ax=ax, color="steelblue", edgecolor="black")
-    ax.set_xlabel("Sınıf")
-    ax.set_ylabel("Örnek Sayısı")
-    ax.set_title("Sınıf Dağılımı")
+    ax.set_xlabel("Class")
+    ax.set_ylabel("Sample Count")
+    ax.set_title("Class Distribution")
     ax.set_xticklabels(counts.index, rotation=30, ha="right")
     for p in ax.patches:
         ax.annotate(f"{int(p.get_height()):,}", (p.get_x() + p.get_width() / 2, p.get_height()),
                     ha="center", va="bottom", fontsize=8)
     plt.tight_layout()
-    path = os.path.join(figures_dir, "sinif_dagilimi.png")
+    path = os.path.join(figures_dir, "class_distribution.png")
     fig.savefig(path, dpi=150)
     plt.close(fig)
-    print(f"Sınıf dağılımı kaydedildi → {path}")
+    print(f"Class distribution saved → {path}")
 
 
 def compare_models(all_metrics: list[dict], figures_dir: str) -> pd.DataFrame:
-    """Modellerin F1 Macro karşılaştırma tablosu ve grafiği."""
+    """Comparison table and bar chart of F1 Macro across models."""
     os.makedirs(figures_dir, exist_ok=True)
     df = pd.DataFrame(all_metrics).set_index("model")
 
-    print("\n=== Model Karşılaştırması ===")
+    print("\n=== Model Comparison ===")
     print(df.to_string())
 
     fig, ax = plt.subplots(figsize=(8, 4))
     df["f1_macro"].plot(kind="bar", ax=ax, color="steelblue", edgecolor="black")
     ax.set_ylim(0, 1)
     ax.set_ylabel("F1 Macro")
-    ax.set_title("Model Karşılaştırması — F1 Macro")
+    ax.set_title("Model Comparison — F1 Macro")
     ax.set_xticklabels(df.index, rotation=30, ha="right")
     plt.tight_layout()
-    path = os.path.join(figures_dir, "model_karsilastirma.png")
+    path = os.path.join(figures_dir, "model_comparison.png")
     fig.savefig(path, dpi=150)
     plt.close(fig)
-    print(f"Karşılaştırma grafiği kaydedildi → {path}")
+    print(f"Comparison chart saved → {path}")
 
     return df
 
@@ -146,4 +145,4 @@ def save_cv_results(cv_df: pd.DataFrame, model_name: str, results_dir: str) -> N
             })
     summary_path = os.path.join(results_dir, f"{model_name}_summary.csv")
     pd.DataFrame(summary_rows).to_csv(summary_path, index=False)
-    print(f"CV sonuçları kaydedildi → {path}")
+    print(f"CV results saved → {path}")

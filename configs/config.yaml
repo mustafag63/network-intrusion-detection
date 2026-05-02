@@ -1,12 +1,12 @@
 data:
   data_dir: "MachineLearningCVE"
-  sample_frac: 1.0          # 0.1 → hızlı test, 1.0 → tam veri
+  sample_frac: 1.0          # 0.1 → quick test, 1.0 → full dataset
   label_col: "Label"
 
 preprocessing:
-  variance_threshold: 0.01  # düşük varyanslı feature'ları at
+  variance_threshold: 0.01  # drop near-zero-variance features
   scale: true               # StandardScaler
-  use_smote: true           # sınıf dengesizliğini gider
+  use_smote: true           # handle class imbalance
 
 model:
   name: "random_forest"     # logistic_regression | random_forest | xgboost | lightgbm
