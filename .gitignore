@@ -9,15 +9,20 @@ __pycache__/
 # Jupyter
 .ipynb_checkpoints/
 
-# Ham veri — çok büyük, repoya alınmaz
+# Raw data — too large for version control (download from CICIDS2017 page)
 MachineLearningCVE/
 
-# Temizlenmiş veri — büyük dosyalar
+# Processed data — large binary files
 outputs/cicids2017_clean.parquet
 outputs/cicids2017_clean.csv.gz
 
-# Eğitilmiş modeller — büyük dosyalar
+# Trained models — large binary files
 outputs/models/
 
-# Ortam
+# Claude Code
+.claude/
+
+# Environment
 .env
+venv/
+.venv/
