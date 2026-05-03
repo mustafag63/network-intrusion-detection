@@ -9,7 +9,8 @@ preprocessing:
   use_smote: true           # handle class imbalance
 
 model:
-  name: "random_forest"     # logistic_regression | random_forest | xgboost | lightgbm
+  name: "xgboost"           # logistic_regression | random_forest | xgboost | lightgbm
+  final: "xgboost_feat_eng" # final model saved at outputs/models/xgboost_feat_eng.joblib
   params:
     logistic_regression:
       max_iter: 1000
@@ -19,13 +20,18 @@ model:
       n_estimators: 100
       max_depth: null
       n_jobs: -1
-    xgboost:
-      n_estimators: 200
+    xgboost:                 # Phase 4 final params (F1 Macro=0.8605)
+      n_estimators: 300
+      max_depth: 8
       learning_rate: 0.1
+      subsample: 0.8
+      colsample_bytree: 0.8
+      tree_method: "hist"
       n_jobs: -1
     lightgbm:
       n_estimators: 200
       learning_rate: 0.1
+      num_leaves: 63
       verbose: -1
       n_jobs: -1
 

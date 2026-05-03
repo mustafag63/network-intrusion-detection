@@ -51,13 +51,13 @@ network-intrusion-detection/
 
 Development is driven from the notebooks:
 
-| Notebook | Content |
-|----------|---------|
-| `01_eda.ipynb` | Data loading, class distribution, correlation, missing values |
-| `02_baseline.ipynb` | First model, 5-fold CV, confusion matrix |
-| `03_comparison.ipynb` | LR / RF / XGBoost / LightGBM comparison |
-| `04_feature_engineering.ipynb` | Feature importance, selection, PCA |
-| `05_hyperparameter.ipynb` | RandomizedSearch / Optuna optimisation |
+| Notebook | Content | Status |
+|----------|---------|--------|
+| `01_eda.ipynb` | Data loading, class distribution, correlation, missing values | ✅ |
+| `02_baseline.ipynb` | First model, 5-fold CV, confusion matrix | ✅ |
+| `03_comparison.ipynb` | LR / RF / XGBoost / LightGBM comparison | ✅ |
+| `04_feature_engineering.ipynb` | Feature importance, selection, PCA | ✅ |
+| `05_hyperparameter.ipynb` | RandomizedSearch / Optuna optimisation | ✅ |
 
 ```bash
 # Start the notebook server
@@ -84,24 +84,36 @@ jupyter notebook notebooks/
 
 ---
 
-## Models
+## Results
 
-| Key | Model |
-|-----|-------|
-| `logistic_regression` | Logistic Regression |
-| `random_forest` | Random Forest |
-| `gradient_boosting` | Gradient Boosting |
-| `xgboost` | XGBoost |
-| `lightgbm` | LightGBM |
-| `svm` | Support Vector Machine |
+| Phase | Model | F1 Macro | F1 Weighted | ROC-AUC |
+|-------|-------|----------|-------------|---------|
+| Phase 2 — Baseline | Random Forest | 0.8449 | 0.9966 | 1.0000 |
+| Phase 3 — Model Comparison | XGBoost | 0.8593 | 0.9987 | 1.0000 |
+| Phase 4 — Feature Engineering | XGBoost (selected features) | 0.8605 | 0.9987 | 1.0000 |
+| Phase 5 — Hyperparameter Tuning | XGBoost (tuned) | 0.7871 | 0.9986 | 1.0000 |
+
+**Final model: `outputs/models/xgboost_feat_eng.joblib` (Phase 4) — F1 Macro=0.8605, ROC-AUC=1.0000**
+
+> Phase 5 tuned model regressed due to RandomizedSearchCV overfitting on SMOTE-augmented CV folds.
+
+---
+
+## Final Model
+
+| File | Description |
+|------|-------------|
+| `outputs/models/xgboost_feat_eng.joblib` | **Final model** — XGBoost, selected features |
+| `outputs/models/preprocessor.joblib` | VarianceThreshold + StandardScaler pipeline |
+| `outputs/models/label_encoder.joblib` | LabelEncoder for 15 attack classes |
+| `outputs/results/selected_features.json` | Feature list used by the final model |
 
 ---
 
 ## Evaluation
 
-- **5-Fold Stratified CV** — F1 Macro and Accuracy per fold
-- **Test set** — F1 Macro, Accuracy, ROC-AUC (OvR)
-- **Plots** — Confusion matrix, model comparison bar chart
+- **Test set** — F1 Macro, Accuracy, ROC-AUC (OvR weighted)
+- **Plots** — Confusion matrix, model comparison bar chart, feature importance
 - **Outputs** — `outputs/results/*.csv`, `outputs/figures/*.png`
 
 ---
